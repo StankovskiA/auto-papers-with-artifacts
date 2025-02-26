@@ -1,0 +1,35 @@
+[
+  {
+    "title": "Paper 1",
+    "authors": [
+      "John",
+      "Jane"
+    ],
+    "publication_date": "2023-01-15",
+    "pdf_link": "link_to_pdf",
+    "code_link": "link_to_code_repo",
+    "year": 2023
+  },
+  {
+    "title": "Paper 2",
+    "authors": [
+      "Michael",
+      "Sarah"
+    ],
+    "publication_date": "2023-03-20",
+    "pdf_link": "link_to_pdf",
+    "code_link": "link_to_code_repo",
+    "year": 2023
+  },
+  {
+    "title": "Paper 3",
+    "authors": [
+      "Alice",
+      "Bob"
+    ],
+    "publication_date": "2022-05-10",
+    "pdf_link": "link_to_pdf",
+    "code_link": "link_to_code_repo",
+    "year": 2022
+  }
+]
