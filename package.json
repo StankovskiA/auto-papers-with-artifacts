@@ -1,13 +1,14 @@
 {
   "name": "auto-papers-with-artifacts",
+  "homepage": "https://stankovskia.github.io/auto-papers-with-artifacts",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -22,11 +23,13 @@
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "gh-pages": "^6.3.0",
     "globals": "^15.15.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-gh-pages": "^1.0.1"
   }
 }
