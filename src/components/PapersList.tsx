@@ -32,7 +32,7 @@ const PapersList = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
-    fetch("/papers.json")
+    fetch(import.meta.env.BASE_URL + 'papers.json')
       .then((response) => response.json())
       .then((data) => setPapers(data))
       .catch((error) => console.error("Error loading JSON:", error));
