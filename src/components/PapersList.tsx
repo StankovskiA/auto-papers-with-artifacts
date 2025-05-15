@@ -1,12 +1,29 @@
 import { useEffect, useState } from "react";
 
+interface ImplementationUrl {
+  identifier: string;
+  type: string;
+  paper_frequency: number;
+  extraction_methods: {
+    type: string;
+    location: string;
+    location_type: string;
+    source: string;
+    source_paragraph: string;
+  }[];
+}
+
 interface Paper {
   title: string;
-  authors: string[];
+  implementation_urls: ImplementationUrl[];
+  doi: string;
+  arxiv: string | null;
+  abstract: string;
   publication_date: string;
+  authors: string;
   pdf_link: string;
-  code_link: string;
-  year: number;
+  file_name?: string;
+  file_path?: string;
 }
 
 const PapersList = () => {
@@ -23,7 +40,7 @@ const PapersList = () => {
 
   // Group papers by year
   const papersByYear: Record<number, Paper[]> = papers.reduce((acc, paper) => {
-    const year = paper.year;
+    const year = paper.publication_date ? parseInt(paper.publication_date.split("-")[0], 10) : -1;
     if (!acc[year]) acc[year] = [];
     acc[year].push(paper);
     return acc;
@@ -35,19 +52,26 @@ const PapersList = () => {
   });
 
   // Filter papers by search query
-  const filteredPapers = searchQuery.trim()
-    ? papers.filter((paper) => {
-        const queryLower = searchQuery.toLowerCase();
-        return (
-          paper.title.toLowerCase().includes(queryLower) ||
-          paper.authors.some((author) => author.toLowerCase().includes(queryLower))
-        );
-      })
-    : papers;
+const filteredPapers = searchQuery.trim()
+  ? papers.filter((paper) => {
+      const queryLower = searchQuery.toLowerCase();
+      const title = paper.title ?? "";
+      const authorsArray = Array.isArray(paper.authors)
+        ? paper.authors
+        : (paper.authors ?? "")
+            .split(",")
+            .map((author) => author.trim());
+
+      return (
+        title.toLowerCase().includes(queryLower) ||
+        authorsArray.some((author) => author.toLowerCase().includes(queryLower))
+      );
+    })
+  : papers;
 
   // Group filtered papers by year
   const filteredPapersByYear: Record<number, Paper[]> = filteredPapers.reduce((acc, paper) => {
-    const year = paper.year;
+    const year = paper.publication_date ? parseInt(paper.publication_date.split("-")[0], 10) : -1;
     if (!acc[year]) acc[year] = [];
     acc[year].push(paper);
     return acc;
@@ -103,27 +127,43 @@ const PapersList = () => {
                   <li key={index} className="p-6 border border-gray-200 rounded-xl bg-white shadow-lg hover:shadow-2xl transition duration-300">
                     <h2 className="text-2xl font-semibold text-text">{paper.title}</h2>
                     <p className="text-sm text-gray-500">
-                      <strong>Authors:</strong> {paper.authors.join(", ")}
+                      <strong>Authors:</strong> {paper.authors}
                     </p>
                     <p className="text-sm text-gray-500">
                       <strong>Published on:</strong> {paper.publication_date}
                     </p>
                     <div className="mt-4">
-                      <a
-                        href={paper.pdf_link}
-                        target="_blank"
-                        className="text-secondary hover:text-primary transition duration-300"
-                      >
-                        📄 Paper PDF
-                      </a>
-                      <span className="mx-2 text-gray-400">|</span>
-                      <a
-                        href={paper.code_link}
-                        target="_blank"
-                        className="text-secondary hover:text-primary transition duration-300"
-                      >
-                        💻 Code Repo
-                      </a>
+                      {paper.pdf_link && paper.pdf_link.trim() !== '' && (
+                        <a
+                          href={paper.pdf_link}
+                          target="_blank"
+                          className="text-secondary hover:text-primary transition duration-300"
+                        >
+                          📄 Paper PDF
+                        </a>
+                      )}
+                      {paper.implementation_urls && paper.implementation_urls.length > 0 && (
+                        <div className="relative inline-block ml-4">
+                          <details className="inline-block">
+                            <summary className="cursor-pointer text-secondary hover:text-primary transition duration-300">
+                              📦 Artifacts
+                            </summary>
+                            <ul className="absolute z-10 mt-2 bg-white border border-gray-200 rounded-md shadow-lg p-2 space-y-1">
+                              {paper.implementation_urls.map((impl, i) => (
+                                <li key={i}>
+                                  <a
+                                    href={impl.identifier}
+                                    target="_blank"
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded whitespace-nowrap min-w-[120px]"
+                                  >
+                                    {impl.type.toUpperCase() === 'GIT' ? '💻 GIT' : impl.type.toUpperCase() === 'ZENODO' ? '📘 ZENODO' : impl.type.toUpperCase()}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        </div>
+                      )}
                     </div>
                   </li>
                 ))}
