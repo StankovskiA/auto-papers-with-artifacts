@@ -4,10 +4,10 @@
 A web page that allows users to browse, filter, and search research papers by title and author. The page is designed to display papers grouped by year, with links to paper PDFs and code repositories.
 
 ## Features
-- Search by title or author.
-- Expandable sections for each year of publication.
-- Clear search functionality.
-- Modern, responsive design with a clean UI.
+- Search by title or author
+- Expandable sections for each year of publication
+- Clear search functionality
+- Modern, responsive design with a clean UI
 
 ## Installation Instructions
 
